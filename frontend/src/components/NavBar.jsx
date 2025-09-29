@@ -8,8 +8,9 @@ export default function NavBar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm" data-testid="navbar">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link to="/" className="text-2xl font-bold text-forest-ink" data-testid="navbar-logo">
-          <span className="text-leaf">◆</span> Carbon<span className="font-light">Wallet</span>
+        <Link to="/" className="flex items-center gap-2 text-forest-ink" data-testid="navbar-logo">
+          <img src="/logo.svg" alt="Carbon Wallet logo" className="h-7 w-7" />
+          <span className="text-2xl font-bold">Carbon<span className="font-light">Wallet</span></span>
         </Link>
         <div className="hidden md:flex items-center gap-6">
           <NavLink to="/solution" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-solution">Solution</NavLink>

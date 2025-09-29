@@ -6,13 +6,13 @@ export default function AdminLeads() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get("/leads").then(({ data }) => setLeads(data)).finally(() => setLoading(false));
+    api.get("/leads?skip=0&limit=50").then(({ data }) => setLeads(data.items || data)).finally(() => setLoading(false));
   }, []);
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-16" data-testid="admin-leads-page">
-      <h1 className="text-3xl font-bold text-forest-ink">Leads (Internal Preview)</h1>
-      <p className="mt-2 text-sm text-slate-600">This is a temporary view. Add auth before exposing.</p>
+      <h1 className="text-3xl font-bold text-forest-ink">Leads (Admin)</h1>
+      <p className="mt-2 text-sm text-slate-600">Authentication required. Contact an administrator for access.</p>
       <div className="mt-6 overflow-x-auto rounded-lg bg-white shadow ring-1 ring-slate-200">
         <table className="min-w-full divide-y divide-slate-200">
           <thead className="bg-slate-50">

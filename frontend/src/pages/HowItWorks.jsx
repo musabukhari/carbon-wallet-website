@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import useReveal from "@/hooks/useReveal";
+import { motion } from "framer-motion";
 
 function StepIcon({ type }) {
   if (type === 1) {
@@ -35,8 +35,9 @@ function VerificationGraphic() {
   );
 }
 
+const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.8 } };
+
 export default function HowItWorks() {
-  useReveal();
   const steps = useMemo(() => ([
     { title: "1. Connect Data Sources", body: "Employees securely link transit accounts, EVs, utilities, and building systems via read-only connectors.", type: 1 },
     { title: "2. Verify & Quantify", body: "MRV engine validates events, applies ISO 14064-2 factors, and cross-checks across multiple APIs.", type: 2 },
@@ -52,7 +53,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16 reveal" data-testid="how-page">
+    <motion.main {...fade} className="mx-auto max-w-7xl px-6 py-16" data-testid="how-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">How It Works</h1>
         <p className="mt-3 text-slate-700">Four steps, continuously verified. Built to be standards-aligned and scalable across industries.</p>
@@ -60,11 +61,11 @@ export default function HowItWorks() {
 
       <ol className="mt-8 grid gap-6 md:grid-cols-4">
         {steps.map((s, i) => (
-          <li key={s.title} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow transition hover:shadow-lg" data-testid={`how-step-item-${i+1}`}>
+          <motion.li key={s.title} whileHover={{ y: -2 }} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow" data-testid={`how-step-item-${i+1}`}>
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 h-12 w-12 rounded-full bg-action-green text-white flex items-center justify-center font-bold">{i+1}</div>
             <div className="mt-6 flex items-center gap-3"><StepIcon type={s.type} /><h3 className="font-semibold text-forest-ink">{s.title}</h3></div>
             <p className="mt-2 text-slate-600 text-sm">{s.body}</p>
-          </li>
+          </motion.li>
         ))}
       </ol>
 
@@ -88,15 +89,15 @@ export default function HowItWorks() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold text-forest-ink">Interactive Demos</h2>
+        <h2 className="text-xl font-semibold text-forest-ink">Explore With Us</h2>
         <div className="mt-3 grid gap-6 md:grid-cols-3">
           {["Trip detection", "Grid-aware scheduling", "Reward simulation"].map((p) => (
-            <button key={p} className="h-28 rounded-lg bg-white shadow ring-1 ring-slate-200 hover:shadow-lg transition grid place-items-center text-slate-700 text-sm" data-testid={`demo-${p}`}>
-              {p} — demo (coming soon)
-            </button>
+            <a key={p} href="#get-started" className="h-28 rounded-lg bg-white shadow ring-1 ring-slate-200 hover:shadow-lg transition grid place-items-center text-slate-700 text-sm" data-testid={`demo-${p}`}>
+              {p} — request a live demo
+            </a>
           ))}
         </div>
       </section>
-    </main>
+    </motion.main>
   );
 }

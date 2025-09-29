@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useReveal from "@/hooks/useReveal";
+import { motion } from "framer-motion";
 
 function PipelineDiagram() {
   const nodes = ["Data", "MRV", "Verify", "Rewards"];
@@ -49,31 +49,19 @@ function CategoryLogos() {
   );
 }
 
-function RoadmapTimeline() {
-  const phases = [
-    { title: "Phase 1", desc: "Retail chain integration; POS + smart meter pilots." },
-    { title: "Phase 2", desc: "Energy industry expansion; HVAC and fleet integrations." },
-    { title: "Phase 3", desc: "End-to-end MRV platform, verification automation & marketplace." },
-  ];
+function ComplianceBadges() {
   return (
-    <svg viewBox="0 0 700 160" className="w-full h-40" aria-hidden>
-      <line x1="40" y1="80" x2="660" y2="80" stroke="#2FBF71" strokeWidth="4" />
-      {phases.map((p, i) => (
-        <g key={p.title} transform={`translate(${60 + i * 280}, 40)`}>
-          <circle cx="0" cy="40" r="10" fill="#1E7A4F">
-            <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite" />
-          </circle>
-          <rect x="20" y="10" width="200" height="60" rx="10" fill="#F4F7F6" stroke="#1E7A4F" />
-          <text x="30" y="35" fontSize="12" fontWeight="700" fill="#0B3B2E">{p.title}</text>
-          <text x="30" y="55" fontSize="11" fill="#1F2937">{p.desc}</text>
-        </g>
-      ))}
-    </svg>
+    <div className="flex flex-wrap items-center gap-2 text-xs">
+      <span className="rounded-full bg-mist px-3 py-1 text-forest-ink ring-1 ring-slate-200">ISO 14064-2</span>
+      <span className="rounded-full bg-mist px-3 py-1 text-forest-ink ring-1 ring-slate-200">GHG Protocol</span>
+      <span className="rounded-full bg-mist px-3 py-1 text-forest-ink ring-1 ring-slate-200">Audit Trail</span>
+    </div>
   );
 }
 
+const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.8 } };
+
 export default function Solution() {
-  useReveal();
   const pillars = [
     {
       title: "Automated Data Ingestion",
@@ -91,13 +79,13 @@ export default function Solution() {
       title: "Compliance & Auditability",
       desc: "Automated audit trails, standards mapping (GHG Protocol), and verification partner integrations.",
       details: "Export audit-ready evidence bundles with data lineage and checkpoint hashes.",
-      visual: <div className="text-xs text-slate-600">Badges: ISO, GHG Protocol</div>,
+      visual: <ComplianceBadges />,
     },
     {
       title: "Reward Orchestration",
       desc: "Translate verified savings into Carbon Points with dynamic pricing signals and marketplace redemption.",
       details: "Dynamic multipliers reflect grid intensity and program priorities; APIs enable partner rewards.",
-      visual: <div className="h-10 w-full rounded bg-mist grid place-items-center text-xs">Marketplace Card</div>,
+      visual: <div className="h-10 w-full rounded bg-mist grid place-items-center text-xs">Rewards Marketplace</div>,
     },
   ];
 
@@ -111,7 +99,7 @@ export default function Solution() {
   const [open, setOpen] = useState(null);
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16 reveal" data-testid="solution-page">
+    <motion.main {...fade} className="mx-auto max-w-7xl px-6 py-16" data-testid="solution-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">The Rewards Platform for Climate Action</h1>
         <p className="mt-3 text-slate-700">Built on a production-ready MRV architecture to measure real behavior, verify real carbon, and reward real value—without self-reporting.</p>
@@ -119,7 +107,7 @@ export default function Solution() {
 
       <section className="mt-10 grid gap-6 md:grid-cols-2">
         {pillars.map((p, idx) => (
-          <div key={p.title} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200 transition hover:shadow-lg" data-testid={`pillar-${p.title}`}>
+          <motion.div key={p.title} whileHover={{ y: -2 }} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200" data-testid={`pillar-${p.title}`}>
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="font-semibold text-forest-ink">{p.title}</h3>
@@ -135,7 +123,7 @@ export default function Solution() {
             {open === idx && (
               <p className="mt-4 text-sm text-slate-700" data-testid={`pillar-details-${idx}`}>{p.details}</p>
             )}
-          </div>
+          </motion.div>
         ))}
       </section>
 
@@ -146,12 +134,24 @@ export default function Solution() {
         </ul>
       </section>
 
-      <section className="mt-12 reveal">
+      <motion.section {...fade} className="mt-12">
         <h2 className="text-xl font-semibold text-forest-ink">Roadmap</h2>
         <div className="mt-3 rounded-xl bg-white p-4 shadow ring-1 ring-slate-200">
-          <RoadmapTimeline />
+          <svg viewBox="0 0 700 160" className="w-full h-40" aria-hidden>
+            <line x1="40" y1="80" x2="660" y2="80" stroke="#2FBF71" strokeWidth="4" />
+            {["Phase 1","Phase 2","Phase 3"].map((title, i) => (
+              <g key={title} transform={`translate(${60 + i * 280}, 40)`}>
+                <circle cx="0" cy="40" r="10" fill="#1E7A4F">
+                  <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <rect x="20" y="10" width="200" height="60" rx="10" fill="#F4F7F6" stroke="#1E7A4F" />
+                <text x="30" y="35" fontSize="12" fontWeight="700" fill="#0B3B2E">{title}</text>
+                <text x="30" y="55" fontSize="11" fill="#1F2937">{i===0?"Retail chain integration; POS + smart meter pilots.":i===1?"Energy industry expansion; HVAC and fleet integrations.":"End-to-end MRV platform, verification automation & marketplace."}</text>
+              </g>
+            ))}
+          </svg>
         </div>
-      </section>
-    </main>
+      </motion.section>
+    </motion.main>
   );
 }

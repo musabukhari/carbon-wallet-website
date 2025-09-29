@@ -1,5 +1,5 @@
 import React from "react";
-import useReveal from "@/hooks/useReveal";
+import { motion } from "framer-motion";
 
 function InitialAvatar({ initial, hue = 150 }) {
   return (
@@ -16,17 +16,18 @@ function InitialAvatar({ initial, hue = 150 }) {
   );
 }
 
+const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.8 } };
+
 export default function WhoWeAre() {
-  useReveal();
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16 reveal" data-testid="who-page">
+    <motion.main {...fade} className="mx-auto max-w-7xl px-6 py-16" data-testid="who-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">Who We Are</h1>
         <p className="mt-3 text-slate-700">We are building the infrastructure for personal climate action—making low-carbon choices measurable, verified, and rewarded globally. No offsets or speculation: real behavior, real carbon, real value.</p>
       </header>
 
       <section className="mt-12 grid gap-8 md:grid-cols-2">
-        <article className="rounded-xl bg-white p-6 shadow ring-1 ring-slate-200" data-testid="bio-umer">
+        <motion.article whileHover={{ y: -2 }} className="rounded-xl bg-white p-6 shadow ring-1 ring-slate-200" data-testid="bio-umer">
           <div className="flex items-center gap-4">
             <InitialAvatar initial="U" hue={150} />
             <div>
@@ -35,9 +36,9 @@ export default function WhoWeAre() {
             </div>
           </div>
           <p className="mt-4 text-sm text-slate-700">Umer leads our mission and partnerships, bringing deep experience across sustainability strategy and deployment with enterprises and cities. He focuses on unlocking measurable behavior change through incentives and trusted data.</p>
-        </article>
+        </motion.article>
 
-        <article className="rounded-xl bg-white p-6 shadow ring-1 ring-slate-200" data-testid="bio-musa">
+        <motion.article whileHover={{ y: -2 }} className="rounded-xl bg-white p-6 shadow ring-1 ring-slate-200" data-testid="bio-musa">
           <div className="flex items-center gap-4">
             <InitialAvatar initial="M" hue={190} />
             <div>
@@ -46,15 +47,15 @@ export default function WhoWeAre() {
             </div>
           </div>
           <p className="mt-4 text-sm text-slate-700">Musa architects our MRV platform and integrations. He ensures our system is secure, standards-aligned, and scalable—from real-time data ingestion to automated verification and rewards.</p>
-        </article>
+        </motion.article>
       </section>
 
       <section className="mt-12 grid gap-6 md:grid-cols-3">
         {[{t:"Integrity",d:"We favor verifiable impact over optics."},{t:"Privacy",d:"Data minimization, encryption, and user control by default."},{t:"Impact",d:"Prioritize actions that drive real carbon outcomes."}].map((v) => (
-          <div key={v.t} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200" data-testid={`value-${v.t}`}>
+          <motion.div key={v.t} whileHover={{ y: -2 }} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200" data-testid={`value-${v.t}`}>
             <h3 className="font-semibold text-forest-ink">{v.t}</h3>
             <p className="mt-2 text-sm text-slate-700">{v.d}</p>
-          </div>
+          </motion.div>
         ))}
       </section>
 
@@ -66,6 +67,6 @@ export default function WhoWeAre() {
           <li>Delightful experiences that turn climate goals into everyday habits</li>
         </ul>
       </section>
-    </main>
+    </motion.main>
   );
 }

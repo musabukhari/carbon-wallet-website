@@ -1,17 +1,18 @@
 import React from "react";
 import LeadForm from "@/components/LeadForm";
 import "@/App.css";
-import useReveal from "@/hooks/useReveal";
+import { motion } from "framer-motion";
+
+const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.8 } };
 
 export default function Home() {
-  useReveal();
   return (
     <div>
       {/* Hero */}
-      <section className="bg-hero-gradient text-white reveal">
+      <motion.section {...fade} className="bg-hero-gradient text-white">
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
-            <div className="fade-in">
+            <div>
               <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl" data-testid="hero-title">
                 Reward Climate Action. <span className="text-gradient">Automatically.</span>
               </h1>
@@ -23,7 +24,7 @@ export default function Home() {
                 <a href="#get-started" className="inline-flex items-center justify-center rounded-lg ring-1 ring-white/50 px-5 py-3 font-semibold text-white hover:bg-white/10" data-testid="hero-secondary-cta">Book a Demo</a>
               </div>
             </div>
-            <div className="lg:justify-self-end reveal">
+            <div className="lg:justify-self-end">
               <div className="bg-card rounded-2xl p-6 shadow-2xl ring-1 ring-white/50 max-w-md" data-testid="hero-card">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -66,10 +67,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* How it works */}
-      <section className="bg-white reveal">
+      <motion.section {...fade} className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <h2 className="text-3xl font-bold text-forest-ink text-center" data-testid="how-it-works-title">Four Steps to Automated Impact</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-4">
@@ -87,10 +87,9 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* CTA with lead form */}
-      <section id="get-started" className="bg-mist reveal">
+      <motion.section {...fade} id="get-started" className="bg-mist">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
@@ -104,7 +103,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }
