@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import useReveal from "@/hooks/useReveal";
 
 function StepIcon({ type }) {
   if (type === 1) {
@@ -13,7 +14,29 @@ function StepIcon({ type }) {
   return (<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden><rect x="6" y="8" width="20" height="12" rx="3" fill="#2FBF71"/><circle cx="16" cy="24" r="4" fill="#1E7A4F"/></svg>);
 }
 
+function VerificationGraphic() {
+  return (
+    <svg viewBox="0 0 540 160" className="w-full h-40" aria-hidden>
+      <rect x="20" y="20" width="160" height="120" rx="12" fill="#F4F7F6" stroke="#1E7A4F" />
+      <text x="100" y="50" textAnchor="middle" fontSize="12" fontWeight="700" fill="#0B3B2E">Cross-source Checks</text>
+      <circle cx="60" cy="90" r="10" fill="#2FBF71" />
+      <circle cx="100" cy="90" r="10" fill="#2FBF71" />
+      <circle cx="140" cy="90" r="10" fill="#2FBF71" />
+      <path d="M60 90 L100 90 L140 90" stroke="#0E7480" strokeWidth="3"/>
+
+      <rect x="200" y="20" width="160" height="120" rx="12" fill="#F4F7F6" stroke="#1E7A4F" />
+      <text x="280" y="50" textAnchor="middle" fontSize="12" fontWeight="700" fill="#0B3B2E">Methodologies</text>
+      <text x="280" y="90" textAnchor="middle" fontSize="11" fill="#1F2937">ISO 14064-2 · GHG Protocol</text>
+
+      <rect x="380" y="20" width="140" height="120" rx="12" fill="#F4F7F6" stroke="#1E7A4F" />
+      <text x="450" y="50" textAnchor="middle" fontSize="12" fontWeight="700" fill="#0B3B2E">Rewards</text>
+      <text x="450" y="90" textAnchor="middle" fontSize="11" fill="#1F2937">Carbon Points</text>
+    </svg>
+  );
+}
+
 export default function HowItWorks() {
+  useReveal();
   const steps = useMemo(() => ([
     { title: "1. Connect Data Sources", body: "Employees securely link transit accounts, EVs, utilities, and building systems via read-only connectors.", type: 1 },
     { title: "2. Verify & Quantify", body: "MRV engine validates events, applies ISO 14064-2 factors, and cross-checks across multiple APIs.", type: 2 },
@@ -29,7 +52,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16" data-testid="how-page">
+    <main className="mx-auto max-w-7xl px-6 py-16 reveal" data-testid="how-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">How It Works</h1>
         <p className="mt-3 text-slate-700">Four steps, continuously verified. Built to be standards-aligned and scalable across industries.</p>
@@ -44,6 +67,13 @@ export default function HowItWorks() {
           </li>
         ))}
       </ol>
+
+      <section className="mt-12">
+        <h2 className="text-xl font-semibold text-forest-ink">Verification & Rewards Graphic</h2>
+        <div className="mt-3 rounded-xl bg-white p-4 shadow ring-1 ring-slate-200">
+          <VerificationGraphic />
+        </div>
+      </section>
 
       <section className="mt-12">
         <h2 className="text-xl font-semibold text-forest-ink">System Details</h2>
