@@ -23,7 +23,7 @@ export default function FAQ() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-16 reveal" data-testid="faq-page">
       <h1 className="text-3xl font-bold text-forest-ink">Frequently Asked Questions</h1>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       <dl className="mt-8 divide-y divide-slate-200 rounded-lg bg-white shadow ring-1 ring-slate-200">
         {items.map((it, i) => (
           <div key={i} className="p-6">
