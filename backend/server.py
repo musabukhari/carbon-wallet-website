@@ -143,7 +143,7 @@ async def get_status_checks():
     return cleaned
 
 
-@api_router.post("/leads", response_model=Lead)
+@api_router.post("/leads", response_model=Lead, status_code=status.HTTP_201_CREATED)
 async def create_lead(lead_input: LeadCreate):
     try:
         lead_obj = Lead(**lead_input.dict())
