@@ -13,7 +13,7 @@
 
 @layer base {
   html { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
-  body { @apply bg-white text-[color:var(--graphite)]; }
+  body { @apply bg-white text-[color:var(--graphite)] min-h-screen; }
 }
 
 .bg-hero-gradient {
@@ -27,12 +27,12 @@
 .bg-leaf\/20 { background-color: rgba(47,191,113,0.2); }
 .bg-mist { background-color: var(--mist); }
 .bg-action-green { background-color: var(--action-green); }
+.bg-sea-teal { background-color: var(--sea-teal); }
 
-/* Animations */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
-.reveal.in { opacity: 1; transform: translateY(0); }
-.fade-in { animation: fadein .8s ease both; }
-@keyframes fadein { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+/* Layout tweaks to remove extra whitespace bottom */
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1 0 auto; }
+footer { margin-top: 0; }
 
 /* Focus rings */
 a:focus { outline: 2px solid var(--leaf); outline-offset: 2px; }
