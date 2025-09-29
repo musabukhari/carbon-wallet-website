@@ -96,9 +96,9 @@ async def list_leads():
     try:
         leads = await db.leads.find().sort("created_at", -1).to_list(1000)
         cleaned: List[Lead] = []
-        for l in leads:
-            l.pop("_id", None)
-            cleaned.append(Lead(**l))
+        for lead in leads:
+            lead.pop("_id", None)
+            cleaned.append(Lead(**lead))
         return cleaned
     except Exception:
         raise HTTPException(status_code=500, detail="Failed to fetch leads")
