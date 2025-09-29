@@ -14,19 +14,18 @@ export default function BottomBar() {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50" data-testid="bottom-bar">
-      <div className="mx-auto max-w-7xl px-6 pb-6">
-        <div className="rounded-xl bg-forest-ink/95 text-white shadow-xl ring-1 ring-white/10">
-          <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-white/90">
-              We use cookies to personalize content and to analyze our traffic. Read our
+      <div className="mx-auto max-w-7xl px-3 pb-3">
+        <div className="rounded-lg bg-forest-ink/95 text-white shadow-xl ring-1 ring-white/10">
+          <div className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
+            <p className="truncate">
+              We use cookies to personalize content and analyze traffic. Read our
               <a href="#" className="underline hover:text-leaf ml-1" data-testid="bottom-bar-privacy-link">Privacy Policy</a>.
-              <span className="ml-3 hidden sm:inline text-white/70">Contact: <a href="mailto:hello@carbonwallet.app" className="underline hover:text-leaf">hello@carbonwallet.app</a></span>
             </p>
-            <div className="flex items-center gap-3">
-              <a href="#get-started" className="rounded-lg bg-white/10 px-4 py-2 text-sm hover:bg-white/20" data-testid="bottom-bar-cta">Get started</a>
+            <div className="flex items-center gap-2 shrink-0">
+              <a href="#get-started" className="rounded-md bg-white/10 px-3 py-1 hover:bg-white/20" data-testid="bottom-bar-cta">Get started</a>
               <button
                 onClick={() => { localStorage.setItem(STORAGE_KEY, "true"); setVisible(false); }}
-                className="rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-forest-ink hover:brightness-110"
+                className="rounded-md bg-leaf px-3 py-1 font-semibold text-forest-ink hover:brightness-110"
                 data-testid="bottom-bar-accept-button"
               >
                 Got it
