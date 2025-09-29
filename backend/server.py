@@ -42,8 +42,16 @@ class Lead(BaseModel):
     name: str
     email: EmailStr
     company: Optional[str] = None
+    phone: Optional[str] = None
+    country: Optional[str] = None
+    industry: Optional[str] = None
+    company_size: Optional[str] = None
+    team_size: Optional[str] = None
+    timeline: Optional[str] = None
+    interests: Optional[List[str]] = None
     message: Optional[str] = None
     source: Optional[str] = None
+    consent: Optional[bool] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -51,8 +59,16 @@ class LeadCreate(BaseModel):
     name: str
     email: EmailStr
     company: Optional[str] = None
+    phone: Optional[str] = None
+    country: Optional[str] = None
+    industry: Optional[str] = None
+    company_size: Optional[str] = None
+    team_size: Optional[str] = None
+    timeline: Optional[str] = None
+    interests: Optional[List[str]] = None
     message: Optional[str] = None
     source: Optional[str] = None
+    consent: Optional[bool] = None
 
 
 # ----- Routes -----
@@ -72,7 +88,6 @@ async def create_status_check(input: StatusCheckCreate):
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
-    # Convert to pydantic models (ignore Mongo _id)
     cleaned = []
     for sc in status_checks:
         sc.pop("_id", None)
