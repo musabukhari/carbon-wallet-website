@@ -1,15 +1,17 @@
 import React from "react";
 import LeadForm from "@/components/LeadForm";
 import "@/App.css";
+import useReveal from "@/hooks/useReveal";
 
 export default function Home() {
+  useReveal();
   return (
     <div>
       {/* Hero */}
-      <section className="bg-hero-gradient text-white">
+      <section className="bg-hero-gradient text-white reveal">
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
-            <div>
+            <div className="fade-in">
               <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl" data-testid="hero-title">
                 Reward Climate Action. <span className="text-gradient">Automatically.</span>
               </h1>
@@ -21,7 +23,7 @@ export default function Home() {
                 <a href="#get-started" className="inline-flex items-center justify-center rounded-lg ring-1 ring-white/50 px-5 py-3 font-semibold text-white hover:bg-white/10" data-testid="hero-secondary-cta">Book a Demo</a>
               </div>
             </div>
-            <div className="lg:justify-self-end">
+            <div className="lg:justify-self-end reveal">
               <div className="bg-card rounded-2xl p-6 shadow-2xl ring-1 ring-white/50 max-w-md" data-testid="hero-card">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -67,12 +69,12 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="bg-white">
+      <section className="bg-white reveal">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <h2 className="text-3xl font-bold text-forest-ink text-center" data-testid="how-it-works-title">Four Steps to Automated Impact</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-4">
             {["Securely Connect Data","Automatically Verify CO₂","Instantly Earn Points","Redeem Exclusive Rewards"].map((title, idx) => (
-              <div key={title} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow" data-testid={`how-step-${idx+1}`}>
+              <div key={title} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow transition hover:shadow-lg" data-testid={`how-step-${idx+1}`}>
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 h-12 w-12 rounded-full bg-action-green text-white flex items-center justify-center font-bold">{idx+1}</div>
                 <h3 className="mt-6 text-lg font-semibold text-forest-ink">{title}</h3>
                 <p className="mt-2 text-slate-600 text-sm">
@@ -88,7 +90,7 @@ export default function Home() {
       </section>
 
       {/* CTA with lead form */}
-      <section id="get-started" className="bg-mist">
+      <section id="get-started" className="bg-mist reveal">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
