@@ -1,28 +1,25 @@
-import React from "react";
+import React, { useMemo } from "react";
+
+function StepIcon({ type }) {
+  if (type === 1) {
+    return (<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden><rect x="4" y="8" width="24" height="16" rx="4" fill="#1E7A4F"/><rect x="8" y="12" width="16" height="8" rx="2" fill="#2FBF71"/></svg>);
+  }
+  if (type === 2) {
+    return (<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden><circle cx="16" cy="16" r="12" fill="#1E7A4F"/><path d="M10 16l4 4 8-8" stroke="#fff" strokeWidth="3" fill="none"/></svg>);
+  }
+  if (type === 3) {
+    return (<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden><circle cx="16" cy="12" r="6" fill="#2FBF71"/><rect x="8" y="18" width="16" height="8" rx="3" fill="#1E7A4F"/></svg>);
+  }
+  return (<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden><rect x="6" y="8" width="20" height="12" rx="3" fill="#2FBF71"/><circle cx="16" cy="24" r="4" fill="#1E7A4F"/></svg>);
+}
 
 export default function HowItWorks() {
-  const steps = [
-    {
-      title: "1. Connect Data Sources",
-      body: "Employees securely link transit accounts, EVs, utilities, and building systems via read-only connectors.",
-      placeholder: "Logos: TfL, Smartcar, Utility (placeholder)",
-    },
-    {
-      title: "2. Verify & Quantify",
-      body: "MRV engine validates events, applies ISO 14064-2 factors, and cross-checks across multiple APIs.",
-      placeholder: "Diagram: Verification checks (placeholder)",
-    },
-    {
-      title: "3. Earn Carbon Points",
-      body: "Every verified kg CO₂e avoided is converted to Carbon Points with dynamic parameters.",
-      placeholder: "Token/points graphic (placeholder)",
-    },
-    {
-      title: "4. Redeem Rewards",
-      body: "Users spend points on curated sustainable brands or impact actions.",
-      placeholder: "Marketplace carousel (placeholder)",
-    },
-  ];
+  const steps = useMemo(() => ([
+    { title: "1. Connect Data Sources", body: "Employees securely link transit accounts, EVs, utilities, and building systems via read-only connectors.", type: 1 },
+    { title: "2. Verify & Quantify", body: "MRV engine validates events, applies ISO 14064-2 factors, and cross-checks across multiple APIs.", type: 2 },
+    { title: "3. Earn Carbon Points", body: "Every verified kg CO₂e avoided is converted to Carbon Points with dynamic parameters.", type: 3 },
+    { title: "4. Redeem Rewards", body: "Users spend points on curated sustainable brands or impact actions.", type: 4 },
+  ]), []);
 
   const details = [
     { label: "Emission Factors", value: "BEIS (UK), EPA (US), region-based grid intensity" },
@@ -40,11 +37,10 @@ export default function HowItWorks() {
 
       <ol className="mt-8 grid gap-6 md:grid-cols-4">
         {steps.map((s, i) => (
-          <li key={s.title} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow" data-testid={`how-step-item-${i+1}`}>
+          <li key={s.title} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow transition hover:shadow-lg" data-testid={`how-step-item-${i+1}`}>
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 h-12 w-12 rounded-full bg-action-green text-white flex items-center justify-center font-bold">{i+1}</div>
-            <h3 className="mt-6 font-semibold text-forest-ink">{s.title}</h3>
+            <div className="mt-6 flex items-center gap-3"><StepIcon type={s.type} /><h3 className="font-semibold text-forest-ink">{s.title}</h3></div>
             <p className="mt-2 text-slate-600 text-sm">{s.body}</p>
-            <div className="mt-4 h-24 w-full rounded-lg border border-dashed border-slate-300 grid place-items-center text-xs text-slate-500">{s.placeholder}</div>
           </li>
         ))}
       </ol>
@@ -62,20 +58,12 @@ export default function HowItWorks() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold text-forest-ink">Use Cases</h2>
-        <ul className="mt-3 list-disc pl-6 text-slate-700 text-sm">
-          <li>Retail chains optimizing store energy spend with live grid intensity signals</li>
-          <li>Corporate commuters earning points for public transit and EV charging</li>
-          <li>Facilities tuning HVAC schedules to reduce peak-time emissions</li>
-          <li>Fleet managers tracking EV energy vs ICE fuel baselines</li>
-        </ul>
-      </section>
-
-      <section className="mt-12">
-        <h2 className="text-xl font-semibold text-forest-ink">Placeholders</h2>
+        <h2 className="text-xl font-semibold text-forest-ink">Interactive Demos</h2>
         <div className="mt-3 grid gap-6 md:grid-cols-3">
-          {["Customer logos","Case studies","Partner integrations"].map((p) => (
-            <div key={p} className="h-28 rounded-lg bg-white shadow ring-1 ring-dashed ring-slate-300 grid place-items-center text-slate-500 text-xs">{p} — placeholder</div>
+          {["Trip detection", "Grid-aware scheduling", "Reward simulation"].map((p) => (
+            <button key={p} className="h-28 rounded-lg bg-white shadow ring-1 ring-slate-200 hover:shadow-lg transition grid place-items-center text-slate-700 text-sm" data-testid={`demo-${p}`}>
+              {p} — demo (coming soon)
+            </button>
           ))}
         </div>
       </section>

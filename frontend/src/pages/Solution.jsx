@@ -1,26 +1,72 @@
-import React from "react";
+import React, { useState } from "react";
+
+function PipelineDiagram() {
+  const nodes = ["Data", "MRV", "Verify", "Rewards"];
+  return (
+    <svg viewBox="0 0 560 120" className="w-full h-28" aria-hidden>
+      {nodes.map((n, i) => (
+        <g key={n} transform={`translate(${40 + i * 140}, 35)`}>
+          <rect width="100" height="50" rx="12" fill="#1E7A4F" opacity="0.9" />
+          <text x="50" y="28" textAnchor="middle" fontSize="14" fontWeight="600" fill="#fff">{n}</text>
+          {i < nodes.length - 1 && (
+            <g>
+              <path d={`M100,25 L120,25`} stroke="#2FBF71" strokeWidth="3" />
+              <polygon points="120,20 130,25 120,30" fill="#2FBF71" />
+            </g>
+          )}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+function CategoryLogos() {
+  const items = [
+    { label: "Utilities", initial: "U" },
+    { label: "Transit", initial: "T" },
+    { label: "HVAC", initial: "H" },
+    { label: "Fleet", initial: "F" },
+  ];
+  return (
+    <div className="grid grid-cols-4 gap-3" aria-label="integration-categories">
+      {items.map((it, i) => (
+        <div key={it.label} className="flex items-center gap-2" data-testid={`logo-${it.label}`}>
+          <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden>
+            <circle cx="16" cy="16" r="14" fill={i % 2 ? "#2FBF71" : "#0E7480"} opacity="0.9" />
+            <text x="16" y="20" textAnchor="middle" fontSize="14" fontWeight="700" fill="#fff">{it.initial}</text>
+          </svg>
+          <span className="text-sm text-slate-700">{it.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Solution() {
   const pillars = [
     {
       title: "Automated Data Ingestion",
       desc: "Secure, read-only integrations to utilities, transport, HVAC, fleet telematics, and POS systems.",
-      placeholder: "Logos: Utility APIs, Smart Meters, Fleet, HVAC (placeholder)"
+      details: "Data normalization and unit harmonization ensure consistent, comparable metrics across sources.",
+      visual: <CategoryLogos />,
     },
     {
       title: "Real-time MRV Engine",
       desc: "Continuous verification with cross-source validation, anomaly detection, and ISO 14064-2 alignment.",
-      placeholder: "Diagram: MRV pipeline (placeholder)"
+      details: "Rule engines map activities to methodologies; anomalies trigger revalidation or user prompts.",
+      visual: <PipelineDiagram />,
     },
     {
       title: "Compliance & Auditability",
       desc: "Automated audit trails, standards mapping (GHG Protocol), and verification partner integrations.",
-      placeholder: "Badges: ISO, GHG Protocol (placeholder)"
+      details: "Export audit-ready evidence bundles with data lineage and checkpoint hashes.",
+      visual: <div className="text-xs text-slate-600">Badges: ISO, GHG Protocol</div>,
     },
     {
       title: "Reward Orchestration",
       desc: "Translate verified savings into Carbon Points with dynamic pricing signals and marketplace redemption.",
-      placeholder: "Card: Rewards marketplace (placeholder)"
+      details: "Dynamic multipliers reflect grid intensity and program priorities; APIs enable partner rewards.",
+      visual: <div className="h-10 w-full rounded bg-mist grid place-items-center text-xs">Marketplace Card</div>,
     },
   ];
 
@@ -31,6 +77,8 @@ export default function Solution() {
     "Automated compliance rule engine",
   ];
 
+  const [open, setOpen] = useState(null);
+
   return (
     <main className="mx-auto max-w-7xl px-6 py-16" data-testid="solution-page">
       <header className="max-w-3xl">
@@ -39,11 +87,23 @@ export default function Solution() {
       </header>
 
       <section className="mt-10 grid gap-6 md:grid-cols-2">
-        {pillars.map((p) => (
-          <div key={p.title} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200" data-testid={`pillar-${p.title}`}>
-            <h3 className="font-semibold text-forest-ink">{p.title}</h3>
-            <p className="mt-2 text-slate-600 text-sm">{p.desc}</p>
-            <div className="mt-4 h-28 w-full rounded-lg border border-dashed border-slate-300 grid place-items-center text-xs text-slate-500">{p.placeholder}</div>
+        {pillars.map((p, idx) => (
+          <div key={p.title} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200 transition hover:shadow-lg" data-testid={`pillar-${p.title}`}>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-semibold text-forest-ink">{p.title}</h3>
+                <p className="mt-2 text-slate-600 text-sm">{p.desc}</p>
+              </div>
+              <button
+                onClick={() => setOpen(open === idx ? null : idx)}
+                className="rounded-md px-2 py-1 text-sm text-forest-ink hover:bg-slate-100"
+                data-testid={`pillar-toggle-${idx}`}
+              >{open === idx ? "Hide" : "Details"}</button>
+            </div>
+            <div className="mt-4">{p.visual}</div>
+            {open === idx && (
+              <p className="mt-4 text-sm text-slate-700" data-testid={`pillar-details-${idx}`}>{p.details}</p>
+            )}
           </div>
         ))}
       </section>
@@ -53,19 +113,6 @@ export default function Solution() {
         <ul className="mt-3 list-disc pl-6 text-slate-700 text-sm">
           {verification.map((v) => (<li key={v}>{v}</li>))}
         </ul>
-      </section>
-
-      <section className="mt-12 grid gap-6 md:grid-cols-3">
-        {["Zero Self-Reporting","Compliance-Ready","Privacy by Design"].map((f) => (
-          <div key={f} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200" data-testid={`feature-${f}`}>
-            <h3 className="font-semibold text-forest-ink">{f}</h3>
-            <p className="mt-2 text-slate-600 text-sm">
-              {f === "Zero Self-Reporting" && "Proprietary API integrations to trusted sources; anomaly detection and multi-source validation ensure integrity."}
-              {f === "Compliance-Ready" && "ISO 14064-2 and GHG Protocol mapping; automated compliance reporting and audit trails."}
-              {f === "Privacy by Design" && "Encryption at rest and in transit, data minimization, and user control over integrations."}
-            </p>
-          </div>
-        ))}
       </section>
 
       <section className="mt-12">
