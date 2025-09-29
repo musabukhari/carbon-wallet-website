@@ -15,6 +15,7 @@ export default function NavBar() {
           <NavLink to="/solution" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-solution">Solution</NavLink>
           <NavLink to="/how-it-works" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-how">How It Works</NavLink>
           <NavLink to="/about" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-about">About</NavLink>
+          <NavLink to="/faq" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-faq">FAQ</NavLink>
         </div>
         <div className="hidden md:flex items-center gap-3">
           <a href="#get-started" className="rounded-lg px-4 py-2 font-medium text-forest-ink hover:bg-slate-100" data-testid="nav-demo-btn">Book a Demo</a>
