@@ -1,14 +1,17 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, ValidationError
 from typing import List, Optional
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
+from jose import jwt, JWTError
+from pymongo.errors import PyMongoError
 
 
 ROOT_DIR = Path(__file__).parent
@@ -71,6 +74,51 @@ class LeadCreate(BaseModel):
     consent: Optional[bool] = None
 
 
+class LeadsPage(BaseModel):
+    items: List[Lead]
+    total: int
+    skip: int
+    limit: int
+
+
+# ----- Auth -----
+ALGORITHM = "HS256"
+JWT_EXPIRE_MINUTES_DEFAULT = 60 * 8
+_EPHEMERAL_SECRET = os.urandom(32).hex()
+JWT_SECRET = os.environ.get("JWT_SECRET", _EPHEMERAL_SECRET)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=JWT_EXPIRE_MINUTES_DEFAULT))
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, JWT_SECRET, algorithm=ALGORITHM)
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        role = payload.get("role", "admin")
+        return {"username": username, "role": role}
+    except JWTError:
+        raise credentials_exception
+
+
 # ----- Routes -----
 @api_router.get("/")
 async def root():
@@ -101,22 +149,44 @@ async def create_lead(lead_input: LeadCreate):
         lead_obj = Lead(**lead_input.dict())
         await db.leads.insert_one(lead_obj.dict())
         return lead_obj
-    except Exception:
+    except ValidationError as ve:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(ve))
+    except PyMongoError as dbe:
+        logging.exception("DB error on create_lead: %s", dbe)
         logging.exception("Failed to create lead")
-        raise HTTPException(status_code=500, detail="Failed to create lead")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create lead")
 
 
-@api_router.get("/leads", response_model=List[Lead])
-async def list_leads():
+@api_router.post("/auth/login", response_model=Token)
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    admin_user = os.environ.get("ADMIN_USERNAME")
+    admin_pass = os.environ.get("ADMIN_PASSWORD")
+    if not admin_user or not admin_pass:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Admin credentials not configured")
+
+    if not (form_data.username == admin_user and form_data.password == admin_pass):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
+
+    token = create_access_token({"sub": admin_user, "role": "admin"})
+    return Token(access_token=token)
+
+
+@api_router.get("/leads", response_model=LeadsPage)
+async def list_leads(skip: int = 0, limit: int = 20, user=Depends(get_current_user)):
     try:
-        leads = await db.leads.find().sort("created_at", -1).to_list(1000)
+        cursor = db.leads.find().sort("created_at", -1).skip(int(skip)).limit(int(limit))
+        leads = await cursor.to_list(length=limit)
         cleaned: List[Lead] = []
         for lead in leads:
             lead.pop("_id", None)
             cleaned.append(Lead(**lead))
-        return cleaned
-    except Exception:
-        raise HTTPException(status_code=500, detail="Failed to fetch leads")
+        total = await db.leads.count_documents({})
+        return LeadsPage(items=cleaned, total=total, skip=skip, limit=limit)
+    except ValidationError as ve:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(ve))
+    except PyMongoError as dbe:
+        logging.exception("DB error on list_leads: %s", dbe)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to fetch leads")
 
 
 # Include the router in the main app
