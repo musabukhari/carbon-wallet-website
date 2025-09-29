@@ -1,34 +1,35 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Global utility classes specific to the app (Tailwind handles most styles) */
+:root {
+  --forest-ink: #0B3B2E; /* Primary dark */
+  --action-green: #1E7A4F; /* Primary button */
+  --leaf: #2FBF71; /* Accent */
+  --sea-teal: #0E7480; /* Accent 2 */
+  --graphite: #1F2937; /* Slate-ish */
+  --mist: #F4F7F6; /* Light bg */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.bg-hero-gradient {
+  background-image: radial-gradient(1000px 400px at 0% 0%, rgba(47,191,113,0.15) 0%, rgba(11,59,46,0) 60%),
+    radial-gradient(800px 300px at 100% 0%, rgba(14,116,128,0.15) 0%, rgba(11,59,46,0) 60%),
+    linear-gradient(180deg, #0B3B2E 0%, #0B3B2E 60%, #0B3B2E 100%);
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.bg-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.85) 100%);
+  backdrop-filter: blur(6px);
 }
 
-.App-link {
-    color: #61dafb;
+.text-gradient {
+  background: linear-gradient(90deg, var(--leaf), var(--sea-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.btn-primary {
+  background-color: var(--action-green);
 }
+
+.bg-action-green { background-color: var(--action-green); }
+.text-forest-ink { color: var(--forest-ink); }
+.bg-mist { background-color: var(--mist); }
