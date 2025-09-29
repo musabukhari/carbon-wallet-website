@@ -86,7 +86,7 @@ async def create_lead(lead_input: LeadCreate):
         lead_obj = Lead(**lead_input.dict())
         await db.leads.insert_one(lead_obj.dict())
         return lead_obj
-    except Exception as e:
+    except Exception:
         logging.exception("Failed to create lead")
         raise HTTPException(status_code=500, detail="Failed to create lead")
 
