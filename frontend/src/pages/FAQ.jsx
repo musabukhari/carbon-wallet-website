@@ -1,8 +1,7 @@
 import React from "react";
-import useReveal from "@/hooks/useReveal";
+import { motion } from "framer-motion";
 
 export default function FAQ() {
-  useReveal();
   const items = [
     { q: "How is CO₂ reduction measured without self-reporting?", a: "We integrate with utility, transportation, and building APIs to measure verified activity data. Our MRV engine cross-validates multiple sources and applies ISO 14064-2 aligned methodology." },
     { q: "What kinds of actions earn Carbon Points?", a: "Public transit, EV charging, carpooling, HVAC optimization, energy efficiency upgrades, and more. We continue to add MRV-backed actions based on your deployments." },
@@ -21,7 +20,7 @@ export default function FAQ() {
   };
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-16 reveal" data-testid="faq-page">
+    <motion.main initial={{opacity:0,y:40}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mx-auto max-w-5xl px-6 py-16" data-testid="faq-page">
       <h1 className="text-3xl font-bold text-forest-ink">Frequently Asked Questions</h1>
       <script type="application/ld+json">{JSON.stringify(faqLd)}</script>
       <dl className="mt-8 divide-y divide-slate-200 rounded-lg bg-white shadow ring-1 ring-slate-200">
@@ -32,6 +31,6 @@ export default function FAQ() {
           </div>
         ))}
       </dl>
-    </main>
+    </motion.main>
   );
 }

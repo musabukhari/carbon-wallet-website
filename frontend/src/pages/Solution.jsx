@@ -4,20 +4,13 @@ import { motion } from "framer-motion";
 function PipelineDiagram() {
   const nodes = ["Data", "MRV", "Verify", "Rewards"];
   return (
-    <svg viewBox="0 0 560 120" className="w-full h-28" aria-hidden>
-      {nodes.map((n, i) => (
-        <g key={n} transform={`translate(${40 + i * 140}, 35)`}>
-          <rect width="100" height="50" rx="12" fill="#1E7A4F" opacity="0.9" />
-          <text x="50" y="28" textAnchor="middle" fontSize="14" fontWeight="600" fill="#fff">{n}</text>
-          {i < nodes.length - 1 && (
-            <g>
-              <path d={`M100,25 L120,25`} stroke="#2FBF71" strokeWidth="3" />
-              <polygon points="120,20 130,25 120,30" fill="#2FBF71" />
-            </g>
-          )}
-        </g>
+    <div className="grid grid-cols-4 gap-4">
+      {nodes.map((n) => (
+        <div key={n} className="rounded-lg bg-action-green/90 px-4 py-3 text-white text-center font-semibold shadow">
+          {n}
+        </div>
       ))}
-    </svg>
+    </div>
   );
 }
 
@@ -32,10 +25,7 @@ function CategoryLogos() {
     <div className="grid grid-cols-4 gap-3" aria-label="integration-categories">
       {items.map((it, i) => (
         <div key={it.label} className="flex items-center gap-2" data-testid={`logo-${it.label}`}>
-          <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden>
-            <circle cx="16" cy="16" r="14" fill={i % 2 ? "#2FBF71" : "#0E7480"} opacity="0.9" />
-            <text x="16" y="20" textAnchor="middle" fontSize="14" fontWeight="700" fill="#fff">{it.initial}</text>
-          </svg>
+          <div className={`grid h-7 w-7 place-items-center rounded-full text-white font-bold ${i % 2 ? "bg-leaf" : "bg-sea-teal"}`}>{it.initial}</div>
           <span className="text-sm text-slate-700">{it.label}</span>
         </div>
       ))}
@@ -53,8 +43,10 @@ function ComplianceBadges() {
   );
 }
 
+const parent = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
+const child = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
+
 export default function Solution() {
-  const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 } };
   const pillars = [
     {
       title: "Automated Data Ingestion",
@@ -83,24 +75,24 @@ export default function Solution() {
   ];
 
   const verification = [
-    "Third-party verification via API (e.g., SustainCERT, Bureau Veritas)",
-    "Multi-source cross-checks: smart meter vs utility bill vs POS",
-    "Statistical anomaly detection and fraud prevention",
-    "Automated compliance rule engine",
+    { title: "Third-party verification via API", desc: "Automated validation with partners like SustainCERT and Bureau Veritas." },
+    { title: "Multi-source cross-checks", desc: "Compare smart meters, utility bills, POS, and device telemetry in real time." },
+    { title: "Anomaly detection & fraud prevention", desc: "Statistical detection and GPS sanity checks to ensure integrity." },
+    { title: "Compliance rule engine", desc: "Programmatic checks against ISO 14064-2 and GHG Protocol." },
   ];
 
   const [open, setOpen] = useState(null);
 
   return (
-    <motion.main initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.8 }} className="mx-auto max-w-7xl px-6 py-16" data-testid="solution-page">
+    <motion.main initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mx-auto max-w-7xl px-6 py-16" data-testid="solution-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">The Rewards Platform for Climate Action</h1>
         <p className="mt-3 text-slate-700">Built on a production-ready MRV architecture to measure real behavior, verify real carbon, and reward real value—without self-reporting.</p>
       </header>
 
-      <section className="mt-10 grid gap-6 md:grid-cols-2">
+      <motion.section variants={parent} initial="hidden" whileInView="show" viewport={{ once: true }} className="mt-10 grid gap-5 md:grid-cols-2">
         {pillars.map((p, idx) => (
-          <motion.div key={p.title} whileHover={{ y: -2 }} className="rounded-lg bg-white p-6 shadow ring-1 ring-slate-200" data-testid={`pillar-${p.title}`}>
+          <motion.div key={p.title} variants={child} whileHover={{ y: -2 }} className="rounded-lg bg-white p-5 shadow ring-1 ring-slate-200" data-testid={`pillar-${p.title}`}>
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="font-semibold text-forest-ink">{p.title}</h3>
@@ -118,29 +110,35 @@ export default function Solution() {
             )}
           </motion.div>
         ))}
-      </section>
+      </motion.section>
 
-      <section className="mt-12">
+      <motion.section variants={parent} initial="hidden" whileInView="show" viewport={{ once: true }} className="mt-12">
         <h2 className="text-xl font-semibold text-forest-ink">Verification Workflows</h2>
-        <ul className="mt-3 list-disc pl-6 text-slate-700 text-sm">
-          {verification.map((v) => (<li key={v}>{v}</li>))}
-        </ul>
-      </section>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {verification.map((v, i) => (
+            <motion.div key={v.title} variants={child} className="group rounded-lg bg-white p-5 shadow ring-1 ring-slate-200 transition hover:shadow-lg">
+              <div className="flex items-center gap-2">
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-action-green text-white text-xs font-bold">{i+1}</span>
+                <h3 className="font-semibold text-forest-ink">{v.title}</h3>
+              </div>
+              <p className="mt-2 text-sm text-slate-700">{v.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
 
-      <motion.section initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.8 }} className="mt-12">
+      <motion.section initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mt-12">
         <h2 className="text-xl font-semibold text-forest-ink">Roadmap</h2>
-        <div className="mt-3 rounded-xl bg-white p-4 shadow ring-1 ring-slate-200">
-          <svg viewBox="0 0 700 160" className="w-full h-40" aria-hidden>
-            <line x1="40" y1="80" x2="660" y2="80" stroke="#2FBF71" strokeWidth="4" />
-            {["Phase 1","Phase 2","Phase 3"].map((title, i) => (
-              <g key={title} transform={`translate(${60 + i * 280}, 40)`}>
-                <circle cx="0" cy="40" r="10" fill="#1E7A4F" />
-                <rect x="20" y="10" width="200" height="60" rx="10" fill="#F4F7F6" stroke="#1E7A4F" />
-                <text x="30" y="35" fontSize="12" fontWeight="700" fill="#0B3B2E">{title}</text>
-                <text x="30" y="55" fontSize="11" fill="#1F2937">{i===0?"Retail chain integration; POS + smart meter pilots.":i===1?"Energy industry expansion; HVAC and fleet integrations.":"End-to-end MRV platform, verification automation & marketplace."}</text>
-              </g>
-            ))}
-          </svg>
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {[{t:"Phase 1",d:"Retail chain integration; POS + smart meter pilots."},{t:"Phase 2",d:"Energy industry expansion; HVAC and fleet integrations."},{t:"Phase 3",d:"End-to-end MRV platform, verification automation & marketplace."}].map((p) => (
+            <div key={p.t} className="rounded-xl bg-white p-5 shadow ring-1 ring-slate-200">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-leaf" />
+                <h3 className="font-semibold text-forest-ink">{p.t}</h3>
+              </div>
+              <p className="mt-2 text-sm text-slate-700 break-words whitespace-normal">{p.d}</p>
+            </div>
+          ))}
         </div>
       </motion.section>
     </motion.main>

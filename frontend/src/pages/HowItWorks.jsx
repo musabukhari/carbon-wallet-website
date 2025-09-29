@@ -36,7 +36,6 @@ function VerificationGraphic() {
 }
 
 export default function HowItWorks() {
-  const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 } };
   const steps = useMemo(() => ([
     { title: "1. Connect Data Sources", body: "Employees securely link transit accounts, EVs, utilities, and building systems via read-only connectors.", type: 1 },
     { title: "2. Verify & Quantify", body: "MRV engine validates events, applies ISO 14064-2 factors, and cross-checks across multiple APIs.", type: 2 },
@@ -44,27 +43,20 @@ export default function HowItWorks() {
     { title: "4. Redeem Rewards", body: "Users spend points on curated sustainable brands or impact actions.", type: 4 },
   ]), []);
 
-  const details = [
-    { label: "Emission Factors", value: "BEIS (UK), EPA (US), region-based grid intensity" },
-    { label: "Data Frequency", value: "15-min smart meter data; real-time transport events" },
-    { label: "Anomaly Detection", value: "Statistical checks; cross-source deltas; GPS sanity checks" },
-    { label: "Privacy", value: "Encryption at rest and in transit, anonymized analytics" },
-  ];
-
   return (
-    <motion.main initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.8 }} className="mx-auto max-w-7xl px-6 py-16" data-testid="how-page">
+    <motion.main initial={{opacity:0,y:40}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mx-auto max-w-7xl px-6 py-16" data-testid="how-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">How It Works</h1>
         <p className="mt-3 text-slate-700">Four steps, continuously verified. Built to be standards-aligned and scalable across industries.</p>
       </header>
 
-      <ol className="mt-8 grid gap-6 md:grid-cols-4">
+      <ol className="mt-8 grid gap-5 md:grid-cols-4">
         {steps.map((s, i) => (
-          <motion.li key={s.title} whileHover={{ y: -2 }} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow" data-testid={`how-step-item-${i+1}`}>
+          <li key={s.title} className="relative rounded-lg border-t-4 border-leaf bg-white p-5 shadow" data-testid={`how-step-item-${i+1}`}>
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 h-12 w-12 rounded-full bg-action-green text-white flex items-center justify-center font-bold">{i+1}</div>
             <div className="mt-6 flex items-center gap-3"><StepIcon type={s.type} /><h3 className="font-semibold text-forest-ink">{s.title}</h3></div>
             <p className="mt-2 text-slate-600 text-sm">{s.body}</p>
-          </motion.li>
+          </li>
         ))}
       </ol>
 
@@ -77,21 +69,24 @@ export default function HowItWorks() {
 
       <section className="mt-12">
         <h2 className="text-xl font-semibold text-forest-ink">System Details</h2>
-        <dl className="mt-4 grid gap-4 md:grid-cols-2">
-          {details.map((d) => (
-            <div key={d.label} className="rounded-lg bg-white p-4 shadow ring-1 ring-slate-200" data-testid={`detail-${d.label}`}>
-              <dt className="text-sm font-semibold text-forest-ink">{d.label}</dt>
-              <dd className="text-sm text-slate-700">{d.value}</dd>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {[{ l: "Emission Factors", v: "BEIS (UK), EPA (US), region-based grid intensity" },
+            { l: "Data Frequency", v: "15-min smart meter data; real-time transport events" },
+            { l: "Anomaly Detection", v: "Statistical checks; cross-source deltas; GPS sanity checks" },
+            { l: "Privacy", v: "Encryption at rest and in transit, anonymized analytics" }].map((d) => (
+            <div key={d.l} className="rounded-lg bg-white p-4 shadow ring-1 ring-slate-200">
+              <div className="text-sm font-semibold text-forest-ink">{d.l}</div>
+              <div className="text-sm text-slate-700">{d.v}</div>
             </div>
           ))}
-        </dl>
+        </div>
       </section>
 
-      <section className="mt-12">
+      <section className="mt-10">
         <h2 className="text-xl font-semibold text-forest-ink">Explore With Us</h2>
-        <div className="mt-3 grid gap-6 md:grid-cols-3">
+        <div className="mt-3 grid gap-4 md:grid-cols-3">
           {["Trip detection", "Grid-aware scheduling", "Reward simulation"].map((p) => (
-            <a key={p} href="#get-started" className="h-28 rounded-lg bg-white shadow ring-1 ring-slate-200 hover:shadow-lg transition grid place-items-center text-slate-700 text-sm" data-testid={`demo-${p}`}>
+            <a key={p} href="#get-started" className="h-24 rounded-lg bg-white shadow ring-1 ring-slate-200 hover:shadow-lg transition grid place-items-center text-slate-700 text-sm" data-testid={`demo-${p}`}>
               {p} — request a live demo
             </a>
           ))}
