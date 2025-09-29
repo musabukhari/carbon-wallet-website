@@ -14,7 +14,7 @@ export default function NavBar() {
         <div className="hidden md:flex items-center gap-6">
           <NavLink to="/solution" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-solution">Solution</NavLink>
           <NavLink to="/how-it-works" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-how">How It Works</NavLink>
-          <NavLink to="/about" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-about">About</NavLink>
+          <NavLink to="/who-we-are" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-who">Who We Are</NavLink>
           <NavLink to="/faq" className={({isActive}) => `${linkBase} ${active({isActive})}`} data-testid="nav-faq">FAQ</NavLink>
         </div>
         <div className="hidden md:flex items-center gap-3">
