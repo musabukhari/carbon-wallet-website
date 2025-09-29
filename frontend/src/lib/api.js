@@ -13,6 +13,14 @@ export const api = axios.create({
   },
 });
 
+api.interceptors.request.use((config) => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("cw_token") : null;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const createLead = async (payload) => {
   const { data } = await api.post("/leads", payload);
   return data;
