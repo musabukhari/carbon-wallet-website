@@ -71,19 +71,36 @@ export default function Home() {
       {/* How it works */}
       <section className="bg-white reveal">
         <div className="mx-auto max-w-7xl px-6 py-20">
-          <h2 className="text-3xl font-bold text-forest-ink text-center" data-testid="how-it-works-title">Four Steps to Automated Impact</h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-4">
-            {["Securely Connect Data","Automatically Verify CO₂","Instantly Earn Points","Redeem Exclusive Rewards"].map((title, idx) => (
-              <div key={title} className="relative rounded-lg border-t-4 border-leaf bg-white p-6 shadow transition hover:shadow-lg" data-testid={`how-step-${idx+1}`}>
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 h-12 w-12 rounded-full bg-action-green text-white flex items-center justify-center font-bold">{idx+1}</div>
-                <h3 className="mt-6 text-lg font-semibold text-forest-ink">{title}</h3>
-                <p className="mt-2 text-slate-600 text-sm">
-                  {idx===0 && "Employees link data sources like transit cards, utility meters, or EV chargers in seconds via secure, read-only integrations."}
-                  {idx===1 && "Our AI-powered MRV engine calculates CO₂ savings using ISO-compliant methodologies. No self-reporting, no fraud."}
-                  {idx===2 && "For every verified kilogram of CO₂ saved, users are instantly issued Carbon Points directly to their wallet."}
-                  {idx===3 && "Employees spend points in our curated marketplace on sustainable brands, green services, or even planting a tree."}
-                </p>
-              </div>
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-forest-ink" data-testid="how-it-works-title">
+              A single platform, endless impact
+            </h2>
+            <p className="mt-3 text-slate-600">
+              Go beyond pledges. Our enterprise-ready tools empower you to verify and reward climate action at scale.
+            </p>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[{
+              title: "Connect Data",
+              desc: "Link transit cards, utility meters, and EV chargers in seconds.",
+              link: "/solution#ingestion"
+            }, {
+              title: "Verify CO₂",
+              desc: "Our AI engine calculates CO₂ savings with no self-reporting.",
+              link: "/solution#mrv"
+            }, {
+              title: "Earn Points",
+              desc: "Users are issued Carbon Points for every kg of CO₂ saved.",
+              link: "/solution#rewards"
+            }, {
+              title: "Redeem Rewards",
+              desc: "Spend points on sustainable brands and green services.",
+              link: "/solution#rewards"
+            }].map((item, idx) => (
+              <a href={item.link} key={item.title} className="block rounded-lg border-t-4 border-leaf bg-white p-6 shadow transition hover:shadow-lg" data-testid={`how-step-${idx+1}`}>
+                <h3 className="text-lg font-semibold text-forest-ink">{item.title}</h3>
+                <p className="mt-2 text-slate-600 text-sm">{item.desc}</p>
+              </a>
             ))}
           </div>
         </div>
