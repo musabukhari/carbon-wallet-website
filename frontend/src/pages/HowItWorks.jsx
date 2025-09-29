@@ -35,9 +35,8 @@ function VerificationGraphic() {
   );
 }
 
-const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.8 } };
-
 export default function HowItWorks() {
+  const fade = { initial: { opacity: 0, y: 50 }, whileInView: { opacity: 1, y: 0 } };
   const steps = useMemo(() => ([
     { title: "1. Connect Data Sources", body: "Employees securely link transit accounts, EVs, utilities, and building systems via read-only connectors.", type: 1 },
     { title: "2. Verify & Quantify", body: "MRV engine validates events, applies ISO 14064-2 factors, and cross-checks across multiple APIs.", type: 2 },
@@ -53,7 +52,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <motion.main {...fade} className="mx-auto max-w-7xl px-6 py-16" data-testid="how-page">
+    <motion.main initial={{opacity:0,y:50}} whileInView={{opacity:1,y:0}} viewport={{ once: true }} transition={{ duration: 0.8 }} className="mx-auto max-w-7xl px-6 py-16" data-testid="how-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">How It Works</h1>
         <p className="mt-3 text-slate-700">Four steps, continuously verified. Built to be standards-aligned and scalable across industries.</p>
