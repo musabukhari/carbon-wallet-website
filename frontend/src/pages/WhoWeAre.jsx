@@ -1,4 +1,5 @@
 import React from "react";
+import useReveal from "@/hooks/useReveal";
 
 function InitialAvatar({ initial, hue = 150 }) {
   return (
@@ -16,8 +17,9 @@ function InitialAvatar({ initial, hue = 150 }) {
 }
 
 export default function WhoWeAre() {
+  useReveal();
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16" data-testid="who-page">
+    <main className="mx-auto max-w-7xl px-6 py-16 reveal" data-testid="who-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">Who We Are</h1>
         <p className="mt-3 text-slate-700">We are building the infrastructure for personal climate action—making low-carbon choices measurable, verified, and rewarded globally. No offsets or speculation: real behavior, real carbon, real value.</p>
