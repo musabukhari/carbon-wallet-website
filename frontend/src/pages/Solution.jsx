@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useReveal from "@/hooks/useReveal";
 
 function PipelineDiagram() {
   const nodes = ["Data", "MRV", "Verify", "Rewards"];
@@ -6,11 +7,15 @@ function PipelineDiagram() {
     <svg viewBox="0 0 560 120" className="w-full h-28" aria-hidden>
       {nodes.map((n, i) => (
         <g key={n} transform={`translate(${40 + i * 140}, 35)`}>
-          <rect width="100" height="50" rx="12" fill="#1E7A4F" opacity="0.9" />
+          <rect width="100" height="50" rx="12" fill="#1E7A4F" opacity="0.9">
+            <animate attributeName="opacity" from="0.5" to="0.9" dur="2s" repeatCount="indefinite" />
+          </rect>
           <text x="50" y="28" textAnchor="middle" fontSize="14" fontWeight="600" fill="#fff">{n}</text>
           {i < nodes.length - 1 && (
             <g>
-              <path d={`M100,25 L120,25`} stroke="#2FBF71" strokeWidth="3" />
+              <path d={`M100,25 L120,25`} stroke="#2FBF71" strokeWidth="3">
+                <animate attributeName="stroke-width" values="2;3;2" dur="2s" repeatCount="indefinite" />
+              </path>
               <polygon points="120,20 130,25 120,30" fill="#2FBF71" />
             </g>
           )}
@@ -32,7 +37,9 @@ function CategoryLogos() {
       {items.map((it, i) => (
         <div key={it.label} className="flex items-center gap-2" data-testid={`logo-${it.label}`}>
           <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden>
-            <circle cx="16" cy="16" r="14" fill={i % 2 ? "#2FBF71" : "#0E7480"} opacity="0.9" />
+            <circle cx="16" cy="16" r="14" fill={i % 2 ? "#2FBF71" : "#0E7480"} opacity="0.9">
+              <animate attributeName="r" values="13;14;13" dur="2s" repeatCount="indefinite" />
+            </circle>
             <text x="16" y="20" textAnchor="middle" fontSize="14" fontWeight="700" fill="#fff">{it.initial}</text>
           </svg>
           <span className="text-sm text-slate-700">{it.label}</span>
@@ -42,7 +49,31 @@ function CategoryLogos() {
   );
 }
 
+function RoadmapTimeline() {
+  const phases = [
+    { title: "Phase 1", desc: "Retail chain integration; POS + smart meter pilots." },
+    { title: "Phase 2", desc: "Energy industry expansion; HVAC and fleet integrations." },
+    { title: "Phase 3", desc: "End-to-end MRV platform, verification automation & marketplace." },
+  ];
+  return (
+    <svg viewBox="0 0 700 160" className="w-full h-40" aria-hidden>
+      <line x1="40" y1="80" x2="660" y2="80" stroke="#2FBF71" strokeWidth="4" />
+      {phases.map((p, i) => (
+        <g key={p.title} transform={`translate(${60 + i * 280}, 40)`}>
+          <circle cx="0" cy="40" r="10" fill="#1E7A4F">
+            <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite" />
+          </circle>
+          <rect x="20" y="10" width="200" height="60" rx="10" fill="#F4F7F6" stroke="#1E7A4F" />
+          <text x="30" y="35" fontSize="12" fontWeight="700" fill="#0B3B2E">{p.title}</text>
+          <text x="30" y="55" fontSize="11" fill="#1F2937">{p.desc}</text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 export default function Solution() {
+  useReveal();
   const pillars = [
     {
       title: "Automated Data Ingestion",
@@ -80,7 +111,7 @@ export default function Solution() {
   const [open, setOpen] = useState(null);
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16" data-testid="solution-page">
+    <main className="mx-auto max-w-7xl px-6 py-16 reveal" data-testid="solution-page">
       <header className="max-w-3xl">
         <h1 className="text-3xl font-bold text-forest-ink">The Rewards Platform for Climate Action</h1>
         <p className="mt-3 text-slate-700">Built on a production-ready MRV architecture to measure real behavior, verify real carbon, and reward real value—without self-reporting.</p>
@@ -115,13 +146,11 @@ export default function Solution() {
         </ul>
       </section>
 
-      <section className="mt-12">
+      <section className="mt-12 reveal">
         <h2 className="text-xl font-semibold text-forest-ink">Roadmap</h2>
-        <ol className="mt-3 list-decimal pl-6 text-slate-700 text-sm">
-          <li>Phase 1: Retail chain integration; POS + smart meter pilots.</li>
-          <li>Phase 2: Energy industry expansion; HVAC and fleet integrations.</li>
-          <li>Phase 3: End-to-end MRV platform with verification automation and marketplace connections.</li>
-        </ol>
+        <div className="mt-3 rounded-xl bg-white p-4 shadow ring-1 ring-slate-200">
+          <RoadmapTimeline />
+        </div>
       </section>
     </main>
   );
